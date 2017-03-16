@@ -46,8 +46,6 @@ public class TerrainGenerator {
                 float height = Mathf.PerlinNoise(seed + x / (NoiseScale * 10) + 0.01f, seed + z / (NoiseScale * 10) + 0.01f);
                 height += Mathf.PerlinNoise(seed + x / NoiseScale + 0.01f, seed + z / NoiseScale + 0.01f) *0.05f;
 
-                height *= (height > 0.5) ? 1f : 0.95f;
-
                 heightmap[x, z] = height * HeightMultiplier;
             }
         }
