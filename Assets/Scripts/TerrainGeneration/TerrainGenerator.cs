@@ -37,15 +37,16 @@ public class TerrainGenerator {
 
     private void GenerateHeightmap()
     {
-        heightmap = new float[Scale+1,Scale+1];
+        heightmap = new float[Resolution+1, Resolution + 1];
 
-        for (int i = 0, z = 0; z <= Scale; z++)
+        for (int i = 0, z = 0; z <= Resolution; z++)
         {
-            for (int x = 0; x <= Scale; x++, i++)
+            for (int x = 0; x <= Resolution; x++, i++)
             {
                 float height = Mathf.PerlinNoise(seed + x / (NoiseScale * 10) + 0.01f, seed + z / (NoiseScale * 10) + 0.01f);
-                height += Mathf.PerlinNoise(seed + x / NoiseScale + 0.01f, seed + z / NoiseScale + 0.01f) *0.1f;
-                height *= (Mathf.PerlinNoise(seed + x / (NoiseScale * 10) + 0.01f, seed + z / (NoiseScale * 10) + 0.01f) <= 0.2f) ? 0.9f : 1;
+                height += Mathf.PerlinNoise(seed + x / NoiseScale + 0.01f, seed + z / NoiseScale + 0.01f) *0.05f;
+
+                height *= (height > 0.5) ? 1f : 0.95f;
 
                 heightmap[x, z] = height * HeightMultiplier;
             }
@@ -59,29 +60,29 @@ public class TerrainGenerator {
         Vector2[] uvs;
         int[] triangles;
 
-        vertices = new Vector3[(Scale + 1) * (Scale + 1)];
-        uvs = new Vector2[(Scale + 1) * (Scale + 1)];
-        for (int i = 0, z = 0; z <= Scale; z++)
+        vertices = new Vector3[(Resolution + 1) * (Resolution + 1)];
+        uvs = new Vector2[(Resolution + 1) * (Resolution + 1)];
+        for (int i = 0, z = 0; z <= Resolution; z++)
         {
-            for (int x = 0; x <= Scale; x++, i++)
+            for (int x = 0; x <= Resolution; x++, i++)
             {
 
-                vertices[i] = new Vector3(x - (Scale / 2), heightmap[x,z], z - (Scale / 2));
+                vertices[i] = new Vector3((x - (Resolution / 2))*Scale, (heightmap[x,z] - (HeightMultiplier/2))* Scale, (z - (Resolution / 2))*Scale);
 
-                uvs[i] = new Vector2(x * (1.0f / Scale), z * (1.0f / Scale));
+                uvs[i] = new Vector2(x * (1.0f / Resolution), z * (1.0f / Resolution));
 
             }
         }
 
-        triangles = new int[Scale * Scale * 6];
-        for (int ti = 0, vi = 0, z = 0; z < Scale; z++, vi++)
+        triangles = new int[Resolution * Resolution * 6];
+        for (int ti = 0, vi = 0, z = 0; z < Resolution; z++, vi++)
         {
-            for (int x = 0; x < Scale; x++, ti += 6, vi++)
+            for (int x = 0; x < Resolution; x++, ti += 6, vi++)
             {
                 triangles[ti] = vi;
                 triangles[ti + 3] = triangles[ti + 2] = vi + 1;
-                triangles[ti + 4] = triangles[ti + 1] = vi + Scale + 1;
-                triangles[ti + 5] = vi + Scale + 2;
+                triangles[ti + 4] = triangles[ti + 1] = vi + Resolution + 1;
+                triangles[ti + 5] = vi + Resolution + 2;
             }
         }
 
