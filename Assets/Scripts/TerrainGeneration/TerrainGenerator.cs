@@ -2,18 +2,19 @@
 using System.Collections;
 using UnityEngine;
 
-public class TerrainGenerator {
-    
-    public int Scale { get; private set; }
-    public int Resolution { get; private set; } 
-    public float NoiseScale { get; private set; }
-    public float HeightMultiplier { get; private set; }
+public class TerrainGenerator : MonoBehaviour{
+
+    public int Scale;
+    public int Resolution;
+    public float NoiseScale;
+    public float HeightMultiplier;
 
     public Mesh TerrainMesh { get; private set; }
 
 
     private float[,] heightmap;
-    private int seed;
+    public int seed;
+    public bool randomSeed = true;
 
 
     public TerrainGenerator(int scale, int resolution, float noiseScale, float heightMultiplier, int seed)
@@ -33,6 +34,8 @@ public class TerrainGenerator {
         GenerateMesh();
         GenerateObjects();
 
+        this.GetComponent<MeshFilter>().mesh = this.TerrainMesh;
+
     }
 
     private void GenerateHeightmap()
@@ -45,6 +48,9 @@ public class TerrainGenerator {
             {
                 float height = Mathf.PerlinNoise(seed + x / (NoiseScale * 10) + 0.01f, seed + z / (NoiseScale * 10) + 0.01f);
                 height += Mathf.PerlinNoise(seed + x / NoiseScale + 0.01f, seed + z / NoiseScale + 0.01f) *0.05f;
+
+                if (height > 0.6f)
+                    height = 0.6f;
 
                 heightmap[x, z] = height * HeightMultiplier;
             }
