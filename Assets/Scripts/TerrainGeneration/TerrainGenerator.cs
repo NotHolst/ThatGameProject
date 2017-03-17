@@ -17,6 +17,10 @@ public class TerrainGenerator : MonoBehaviour{
     public bool randomSeed = true;
 
 
+    public GameObject[] TreePrefabs;
+    public GameObject[] StonePrefabs;
+    public GameObject[] GoldPrefabs;
+
     public TerrainGenerator(int scale, int resolution, float noiseScale, float heightMultiplier, int seed)
     {
         this.Scale = scale;
@@ -51,6 +55,12 @@ public class TerrainGenerator : MonoBehaviour{
 
                 if (height > 0.6f)
                     height = 0.6f;
+
+                if (height < 0.47f)
+                    height = 0;
+
+                if (x == 0 || x == Resolution || z == 0 || z == Resolution)
+                    height = 0.5f;
 
                 heightmap[x, z] = height * HeightMultiplier;
             }
@@ -102,8 +112,13 @@ public class TerrainGenerator : MonoBehaviour{
     private void GenerateObjects()
     {
 
-        
+        for (int x = 0; x < heightmap.GetLength(0); x++)
+        {
+            for (int z = 0; z < heightmap.GetLength(1); z++)
+            {
 
+            }
+        }
 
     }
 
