@@ -31,10 +31,13 @@
 			o.Albedo = _Color.rgb;
 			o.Smoothness = _Glossiness;
 		
-			fixed4 depth = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(IN.screenPos));
+			fixed4 depth = tex2Dproj(_CameraDepthTexture, IN.screenPos);
 				
 			o.Albedo = _Color;
-			if (distance(LinearEyeDepth(depth), distance(_WorldSpaceCameraPos, IN.worldPos)) < _ShoreFade) {
+			/*if (distance(LinearEyeDepth(depth), distance(_WorldSpaceCameraPos, IN.worldPos)) < 0.5) {
+				o.Albedo = fixed4(1, 1, 1, 1);
+			}*/
+			if (LinearEyeDepth(depth) < 10 ) {
 				o.Albedo = fixed4(1, 1, 1, 1);
 			}
 
