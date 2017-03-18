@@ -50,14 +50,14 @@ public class TerrainGenerator : MonoBehaviour{
         {
             for (int x = 0; x <= Resolution; x++, i++)
             {
-                float height = Mathf.PerlinNoise(seed + x / (NoiseScale * 10) + 0.01f, seed + z / (NoiseScale * 10) + 0.01f);
+                float height = Mathf.PerlinNoise(seed + x / (NoiseScale * 10) + 0.01f, seed + z / (NoiseScale * 10) + 0.01f)+0.2f;
                 height += Mathf.PerlinNoise(seed + x / NoiseScale + 0.01f, seed + z / NoiseScale + 0.01f) *0.05f;
 
                 if (height > 0.6f)
                     height = 0.6f;
 
                 if (height < 0.47f)
-                    height = 0;
+                    height *= 1.47f-(height*1.25f);
 
                 if (x == 0 || x == Resolution || z == 0 || z == Resolution)
                     height = 0.5f;
@@ -116,7 +116,7 @@ public class TerrainGenerator : MonoBehaviour{
         {
             for (int z = 0; z < heightmap.GetLength(1); z++)
             {
-
+                
             }
         }
 
